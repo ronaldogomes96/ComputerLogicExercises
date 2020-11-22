@@ -16,7 +16,7 @@ class Not: Formula {
     }
     
     func getFormulaDescription() -> String {
-        return "(-\(atom.getFormulaDescription()))"
+        return "-\(atom.getFormulaDescription())"
     }
     
 }

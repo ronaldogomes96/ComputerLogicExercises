@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		777FA5F62569E71E009DF7A5 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777FA5F52569E71E009DF7A5 /* Functions.swift */; };
 		77EC48232569ACF2002DBAFB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC48222569ACF2002DBAFB /* main.swift */; };
 		77EC482C2569B360002DBAFB /* Formula.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC482B2569B360002DBAFB /* Formula.swift */; };
 		77EC482F2569B3CA002DBAFB /* Atom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC482E2569B3CA002DBAFB /* Atom.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		777FA5F52569E71E009DF7A5 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		77EC481F2569ACF2002DBAFB /* ComputerLogicExercises */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputerLogicExercises; sourceTree = BUILT_PRODUCTS_DIR; };
 		77EC48222569ACF2002DBAFB /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		77EC482B2569B360002DBAFB /* Formula.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formula.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				77EC483B2569C666002DBAFB /* Implies.swift */,
 				77EC48342569B71A002DBAFB /* And.swift */,
 				77EC48372569C58F002DBAFB /* Or.swift */,
+				777FA5F52569E71E009DF7A5 /* Functions.swift */,
 			);
 			path = ComputerLogicExercises;
 			sourceTree = "<group>";
@@ -140,6 +143,7 @@
 				77EC482C2569B360002DBAFB /* Formula.swift in Sources */,
 				77EC48322569B60C002DBAFB /* Not.swift in Sources */,
 				77EC482F2569B3CA002DBAFB /* Atom.swift in Sources */,
+				777FA5F62569E71E009DF7A5 /* Functions.swift in Sources */,
 				77EC483C2569C666002DBAFB /* Implies.swift in Sources */,
 				77EC48352569B71A002DBAFB /* And.swift in Sources */,
 				77EC48382569C58F002DBAFB /* Or.swift in Sources */,
