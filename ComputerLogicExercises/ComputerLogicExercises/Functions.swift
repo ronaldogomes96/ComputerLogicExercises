@@ -44,4 +44,37 @@ class Functions {
             return atoms(formula: newFormula.left) + atoms(formula: newFormula.right)
         }
     }
+    
+    func substitution(formula: Formula, oldSubformula: Formula, newSubformula:  Formula) -> Formula {
+        if formula is Atom && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
+            return formula
+        }
+        else if formula.getFormulaDescription() == oldSubformula.getFormulaDescription() {
+            return newSubformula
+        }
+        else if formula is Implies && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
+            if let newFormula = formula as? And {
+                return And(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                           right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+            }
+            else if let newFormula = formula as? Or {
+                return Or(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                          right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+            }
+            else {
+                if let newFormula = formula as? Implies {
+                    return Implies(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                                   right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+                }
+            }
+        }
+        else {
+            if formula is Not && formula.getFormulaDescription() != formula.getFormulaDescription() {
+                if let newFormula = formula as? Not {
+                    return Not(atom: newFormula.atom)
+                }
+            }
+        }
+        return formula
+    }
 }
