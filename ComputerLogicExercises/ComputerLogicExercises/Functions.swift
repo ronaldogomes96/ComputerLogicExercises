@@ -69,7 +69,7 @@ class Functions {
             }
         }
         else {
-            if formula is Not && formula.getFormulaDescription() != formula.getFormulaDescription() {
+            if formula is Not && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
                 if let newFormula = formula as? Not {
                     return Not(atom: newFormula.atom)
                 }
