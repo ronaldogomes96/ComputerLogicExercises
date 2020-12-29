@@ -9,6 +9,24 @@ import Foundation
 
 class Functions {
     
+    func numberOfAtoms(formula: Formula) -> Int {
+        if formula is Atom {
+            return 1
+        }
+        else if formula is Not {
+            guard let newFormula = formula as? Not else {
+                return 0
+            }
+            return numberOfAtoms(formula: newFormula.atom)
+        }
+        else {
+            guard let newFormula = formula as? Implies else {
+                return 0
+            }
+            return numberOfAtoms(formula: newFormula.left) + numberOfAtoms(formula: newFormula.right)
+        }
+    }
+    
     func connec(formula: Formula) -> Int {
         if formula is Atom {
             return 0
