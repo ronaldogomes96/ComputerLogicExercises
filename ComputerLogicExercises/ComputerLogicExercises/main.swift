@@ -45,7 +45,7 @@ print("Quantidade de connectivos de cada formula")
 print("\(formula0.getFormulaDescription()): \(functions.connec(formula: formula0))")
 print("\(formula1.getFormulaDescription()): \(functions.connec(formula: formula1))")
 print("\(formula3.getFormulaDescription()): \(functions.connec(formula: formula3))")
-print("\(formula5.getFormulaDescription()): \(functions.connec(formula: formula4))") // Printa 1 quando é pra ser 2, porque?
+print("\(formula5.getFormulaDescription()): \(functions.connec(formula: formula5))")
 print("\(formula7.getFormulaDescription()): \(functions.connec(formula: formula7))")
 print("\(formula8.getFormulaDescription()): \(functions.connec(formula: formula8))")
 
@@ -56,4 +56,17 @@ print("\(formula8.getFormulaDescription()): \(functions.atoms(formula: formula8)
 
 print("Substituicao")
 print("\(functions.substitution(formula: formula10, oldSubformula: formula0, newSubformula: formula12).getFormulaDescription())")
+
+print("Valor verdade de cada formula")
+print("\(formula0.getFormulaDescription()): \(functions.truthValue(formula: formula0, interpretation: ["q": true]))")
+print("\(formula0.getFormulaDescription()): \(functions.truthValue(formula: formula0, interpretation: ["q": false]))")
+print("\(formula1.getFormulaDescription()): \(functions.truthValue(formula: formula1, interpretation: ["p": false]))")
+print("\(formula12.getFormulaDescription()): \(functions.truthValue(formula: formula12, interpretation: ["r": false, "t": true]))")
+print("\(formula12.getFormulaDescription()): \(functions.truthValue(formula: formula12, interpretation: ["r": false, "t": false]))")
+print("\(formula3.getFormulaDescription()): \(functions.truthValue(formula: formula3, interpretation: ["p": true, "q": false]))")
+print("\(formula3.getFormulaDescription()): \(functions.truthValue(formula: formula3, interpretation: ["p": true, "q": true]))")
+print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": false, "s": false, "q": true]))")
+print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": false, "s": false, "q": false]))")
+print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
+print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
 
