@@ -98,7 +98,7 @@ class Functions {
     
     func truthValue(formula: Formula, interpretation: [String: Bool]) -> Bool {
         if formula is Atom {
-            return interpretation[formula.getFormulaDescription()]!
+            return interpretation[formula.getFormulaDescription()] ?? Bool.init()
         }
         else if formula is Not {
             guard let newFormula = formula as? Not else {
@@ -127,5 +127,27 @@ class Functions {
             }
         }
         return Bool.init()
+    }
+    
+    func satisfabilityChecking(formula: Formula) -> Bool {
+        var listOfAtoms = atoms(formula: formula)
+        var interpretation = [String: Bool]()
+        return isSatisfactory(formula: formula, atoms: &listOfAtoms, interpretation: &interpretation)
+    }
+    
+    func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Bool {
+        if atoms == [] {
+            return truthValue(formula: formula, interpretation: interpretation)
+        }
+        let atom = atoms.popLast() ?? ""
+        interpretation[atom] = true
+        var interpretationOne = interpretation
+        interpretation[atom] = false
+        var interpretationTwo = interpretation
+        let result = isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationOne)
+        if result {
+            return result
+        }
+        return isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationTwo)
     }
 }

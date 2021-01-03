@@ -22,6 +22,7 @@ let formula9 = Atom(atom: "r")
 let formula11 = Atom(atom: "t")
 let formula10 = Implies(left: formula3, right: formula9)
 let formula12 = Or(left: formula9, right: formula11)
+let formula13 = Implies(left: formula1, right: formula0)
 
 
 print("Formulas logicas")
@@ -70,3 +71,8 @@ print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: form
 print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
 print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
 
+print("Satisfabilidade de cada formula")
+print("\(formula3.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula3))")
+print("\(formula13.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula13))")
+print("\(formula10.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula10))")
+print("\(formula8.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula8))")
