@@ -150,4 +150,13 @@ class Functions {
         }
         return isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationTwo)
     }
+    
+    func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
+        var uniquePremise: Formula = premise.first!
+        premise.forEach { formula in
+            uniquePremise = And(left: uniquePremise, right: formula)
+        }
+        let consequence = And(left: uniquePremise, right: Not(atom: conclusion))
+        return !satisfabilityChecking(formula: consequence)
+    }
 }

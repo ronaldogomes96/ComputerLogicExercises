@@ -9,12 +9,12 @@ import Foundation
 
 let functions = Functions()
 
-let formula1 = Atom(atom: "p")
+var formula1 = Atom(atom: "p")
 let formula2 = Atom(atom: "q")
-let formula0 = Not(atom: formula2)
-let formula3 = And(left: formula1, right: formula0)
+var formula0 = Not(atom: formula2)
+var formula3 = And(left: formula1, right: formula0)
 let formula4 = And(left: Atom(atom: "p"), right: Atom(atom: "s"))
-let formula5 = Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s")))
+var formula5 = Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s")))
 let formula6 = Or(left: Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s"))), right: Atom(atom: "q"))
 let formula7 = Implies(left: Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s"))), right: And(left: Atom(atom: "q"), right: Atom(atom: "r")))
 let formula8 = Implies(left: Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s"))), right: And(left: Atom(atom: "q"), right: Not(atom: And(left: Atom(atom: "p"), right: Atom(atom: "s")))))
@@ -76,3 +76,8 @@ print("\(formula3.getFormulaDescription()): \(functions.satisfabilityChecking(fo
 print("\(formula13.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula13))")
 print("\(formula10.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula10))")
 print("\(formula8.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula8))")
+
+print("Consequencia logica")
+print("\(formula3.getFormulaDescription()), \(formula5.getFormulaDescription()) |= \(formula0.getFormulaDescription()) : \(functions.logicalConsequence(premise: [formula3, formula5], conclusion: formula0))")
+print("\(formula0.getFormulaDescription()), \(formula10.getFormulaDescription()) |= \(formula8.getFormulaDescription()) : \(functions.logicalConsequence(premise: [formula0, formula10], conclusion: formula8))")
+print("\(formula1.getFormulaDescription()) |= \(formula2.getFormulaDescription()) : \(functions.logicalConsequence(premise: [formula0, formula1], conclusion: formula2))")
