@@ -135,7 +135,7 @@ class Functions {
         return isSatisfactory(formula: formula, atoms: &listOfAtoms, interpretation: &interpretation)
     }
     
-    func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Bool {
+    private func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Bool {
         if atoms == [] {
             return truthValue(formula: formula, interpretation: interpretation)
         }
@@ -149,6 +149,10 @@ class Functions {
             return result
         }
         return isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationTwo)
+    }
+    
+    func validityChecking(formula: Formula) -> Bool {
+        return !satisfabilityChecking(formula: Not(atom: formula)) 
     }
     
     func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
