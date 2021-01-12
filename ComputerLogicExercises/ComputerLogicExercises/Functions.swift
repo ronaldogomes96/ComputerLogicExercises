@@ -129,15 +129,19 @@ class Functions {
         return Bool.init()
     }
     
-    func satisfabilityChecking(formula: Formula) -> Bool {
+    func satisfabilityChecking(formula: Formula) -> Any {
         var listOfAtoms = atoms(formula: formula)
         var interpretation = [String: Bool]()
         return isSatisfactory(formula: formula, atoms: &listOfAtoms, interpretation: &interpretation)
     }
     
-    private func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Bool {
+    private func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Any {
         if atoms == [] {
-            return truthValue(formula: formula, interpretation: interpretation)
+            if truthValue(formula: formula, interpretation: interpretation) {
+                return interpretation
+            } else {
+                return false
+            }
         }
         let atom = atoms.popLast() ?? ""
         interpretation[atom] = true
@@ -145,14 +149,18 @@ class Functions {
         interpretation[atom] = false
         var interpretationTwo = interpretation
         let result = isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationOne)
-        if result {
+        if (result as? Bool) != false {
             return result
         }
         return isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationTwo)
     }
     
     func validityChecking(formula: Formula) -> Bool {
-        return !satisfabilityChecking(formula: Not(atom: formula)) 
+        if (satisfabilityChecking(formula: Not(atom: formula)) as? Bool) == false {
+            return true
+        } else {
+            return false
+        }
     }
     
     func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
@@ -161,6 +169,10 @@ class Functions {
             uniquePremise = And(left: uniquePremise, right: formula)
         }
         let consequence = And(left: uniquePremise, right: Not(atom: conclusion))
-        return !satisfabilityChecking(formula: consequence)
+        if (satisfabilityChecking(formula: consequence) as? Bool) == false{
+            return true
+        } else {
+            return false
+        }
     }
 }
