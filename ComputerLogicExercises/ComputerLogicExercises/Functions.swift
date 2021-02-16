@@ -130,12 +130,12 @@ class Functions {
     }
     
     func satisfabilityChecking(formula: Formula) -> Any {
-        var listOfAtoms = atoms(formula: formula)
-        var interpretation = [String: Bool]()
-        return isSatisfactory(formula: formula, atoms: &listOfAtoms, interpretation: &interpretation)
+        let listOfAtoms = atoms(formula: formula)
+        let interpretation = [String: Bool]()
+        return isSatisfactory(formula: formula, atoms: listOfAtoms, interpretation: interpretation)
     }
     
-    private func isSatisfactory(formula: Formula, atoms: inout [String], interpretation: inout [String: Bool]) -> Any {
+    private func isSatisfactory(formula: Formula, atoms: [String], interpretation: [String: Bool]) -> Any {
         if atoms == [] {
             if truthValue(formula: formula, interpretation: interpretation) {
                 return interpretation
@@ -143,16 +143,20 @@ class Functions {
                 return false
             }
         }
-        let atom = atoms.popLast() ?? ""
-        interpretation[atom] = true
+
+        var newAtons = atoms
+        let atom = newAtons.popLast() ?? ""
         var interpretationOne = interpretation
-        interpretation[atom] = false
         var interpretationTwo = interpretation
-        let result = isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationOne)
+        interpretationOne[atom] = true
+        interpretationTwo[atom] = false
+
+        let result = isSatisfactory(formula: formula, atoms: newAtons, interpretation: interpretationOne)
         if (result as? Bool) != false {
             return result
         }
-        return isSatisfactory(formula: formula, atoms: &atoms, interpretation: &interpretationTwo)
+
+        return isSatisfactory(formula: formula, atoms: newAtons, interpretation: interpretationTwo)
     }
     
     func validityChecking(formula: Formula) -> Bool {

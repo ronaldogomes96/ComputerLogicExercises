@@ -19,8 +19,8 @@ class Sudoku {
     
     func givenDigitsConstraints(grid: [[Int]]) -> Formula {
         var list_given = [Formula]()
-        for i in 0...grid.count {
-            for j in 0...grid.count {
+        for i in 0..<grid.count {
+            for j in 0..<grid.count {
                 if grid[i][j] != 0 {
                     list_given.append(Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(grid[i][j]))"))
                     for n in 1...grid.count+1 {
@@ -135,8 +135,12 @@ class Sudoku {
     
     func sudokuSolution(grid: [[Int]]) -> [[Int]] {
         var mygrid = grid
-        //let solution = isSatisfiable(finalFormula())
-        let solution = [String: Bool]()
+        let fn = Functions()
+        guard let solution = fn.satisfabilityChecking(formula: finalFormula()) as? [String: Bool] else {
+            print(fn.satisfabilityChecking(formula: finalFormula()))
+            return [[0]]
+        }
+        //let solution = [String: Bool]()
         for i in 0...grid.count {
             for j in 0...grid.count {
                 if grid[i][j] == 0 {

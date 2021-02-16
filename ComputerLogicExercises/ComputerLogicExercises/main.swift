@@ -29,6 +29,7 @@ let formula16 = Implies(left: formula1, right: formula0)
 let formula17 = Not(atom: Implies(left: formula1, right: formula3))
 let formula18 = And(left: And(left: Implies(left: formula1, right: formula2), right: Or(left: formula9, right: Not(atom: formula2))),
                     right: And(left: Or(left: formula11, right: Not(atom: formula9)), right: formula1))
+let formula19 = And(left: And(left: And(left: Not(atom: Atom(atom: "a")), right: Not(atom: Atom(atom: "b"))), right: Not(atom: Atom(atom: "c"))), right: Not(atom: Atom(atom: "d")))
 
 
 print("Formulas logicas")
@@ -51,7 +52,6 @@ print(formula15.getFormulaDescription())
 print(formula16.getFormulaDescription())
 print(formula17.getFormulaDescription())
 print(formula18.getFormulaDescription())
-
 
 print("Quantidade de atomos de cada formula")
 print("\(formula0.getFormulaDescription()): \(functions.numberOfAtoms(formula: formula0))")
@@ -87,6 +87,7 @@ print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: form
 print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": false, "s": false, "q": false]))")
 print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
 print("\(formula8.getFormulaDescription()): \(functions.truthValue(formula: formula8, interpretation: ["p": true, "s": true, "q": false]))")
+print("\(formula19.getFormulaDescription()): \(functions.truthValue(formula: formula19, interpretation: ["d": false]))")
 
 print("Satisfabilidade de cada formula")
 print("\(formula3.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula3))")
@@ -97,8 +98,7 @@ print("\(formula15.getFormulaDescription()): \(functions.satisfabilityChecking(f
 print("\(formula14.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula14))")
 print("\(formula17.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula17))")
 print("\(formula18.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula18))")
-
-
+print("\(formula19.getFormulaDescription()): \(functions.satisfabilityChecking(formula: formula19)))")
 
 print("Validade de cada formula")
 print("\(formula3.getFormulaDescription()): \(functions.validityChecking(formula: formula3))")
@@ -109,7 +109,6 @@ print("\(formula8.getFormulaDescription()): \(functions.validityChecking(formula
 print("\(formula15.getFormulaDescription()): \(functions.validityChecking(formula: formula15))")
 print("\(formula14.getFormulaDescription()): \(functions.validityChecking(formula: formula14))")
 print("\(formula17.getFormulaDescription()): \(functions.validityChecking(formula: formula17))")
-
 
 print("Consequencia logica")
 print("\(formula3.getFormulaDescription()), \(formula5.getFormulaDescription()) |= \(formula0.getFormulaDescription()) : \(functions.logicalConsequence(premise: [formula3, formula5], conclusion: formula0))")
