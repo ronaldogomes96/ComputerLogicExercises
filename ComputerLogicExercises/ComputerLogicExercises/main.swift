@@ -68,9 +68,9 @@ print("\(formula7.getFormulaDescription()): \(functions.connec(formula: formula7
 print("\(formula8.getFormulaDescription()): \(functions.connec(formula: formula8))")
 
 print("Atomos de cada formula")
-print("\(formula1.getFormulaDescription()): \(functions.atoms(formula: formula1))")
-print("\(formula3.getFormulaDescription()): \(functions.atoms(formula: formula3))")
-print("\(formula8.getFormulaDescription()): \(functions.atoms(formula: formula8))")
+print("\(formula1.getFormulaDescription()): \(functions.listOfAtoms(formula: formula1))")
+print("\(formula3.getFormulaDescription()): \(functions.listOfAtoms(formula: formula3))")
+print("\(formula8.getFormulaDescription()): \(functions.listOfAtoms(formula: formula8))")
 
 print("Substituicao")
 print("\(functions.substitution(formula: formula10, oldSubformula: formula0, newSubformula: formula12).getFormulaDescription())")

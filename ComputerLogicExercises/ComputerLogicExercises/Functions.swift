@@ -45,7 +45,14 @@ class Functions {
         }
     }
     
-    func atoms(formula: Formula) -> [String]{
+    func listOfAtoms(formula: Formula) -> [String]{
+        let listOfAtoms = self.atoms(formula: formula)
+        let setList = Set(listOfAtoms)
+        let listOfAtomsTransformed = setList.map { String($0) }
+        return listOfAtomsTransformed
+    }
+    
+    private func atoms(formula: Formula) -> [String]{
         if formula is Atom {
             return [formula.getFormulaDescription()]
         }
@@ -130,9 +137,21 @@ class Functions {
     }
     
     func satisfabilityChecking(formula: Formula) -> Any {
-        let listOfAtoms = atoms(formula: formula)
-        let interpretation = [String: Bool]()
-        return isSatisfactory(formula: formula, atoms: listOfAtoms, interpretation: interpretation)
+        let listOfAtoms = self.listOfAtoms(formula: formula)
+        let setList = Set(listOfAtoms)
+        var listOfAtomsTransformed = setList.map { String($0) }
+        
+        let interpretation = self.createInterpretations(formula: formula)
+        
+        listOfAtomsTransformed.forEach {
+            if interpretation[$0] != nil {
+                if let index = listOfAtomsTransformed.firstIndex(of: $0) {
+                    listOfAtomsTransformed.remove(at: index)
+                }
+            }
+        }
+        
+        return isSatisfactory(formula: formula, atoms: listOfAtomsTransformed, interpretation: interpretation)
     }
     
     private func isSatisfactory(formula: Formula, atoms: [String], interpretation: [String: Bool]) -> Any {
@@ -157,6 +176,36 @@ class Functions {
         }
 
         return isSatisfactory(formula: formula, atoms: newAtons, interpretation: interpretationTwo)
+    }
+    
+    func createInterpretations(formula: Formula) -> [String: Bool] {
+        var listOfFormulas = [formula]
+        var interpretationFormulas = [String: Bool]()
+        
+        while true {
+            let listOfFormulasActual = listOfFormulas
+            for (index, insideFormula) in listOfFormulas.enumerated() {
+                if let insideFormula = insideFormula as? And {
+                    listOfFormulas.remove(at: index)
+                    listOfFormulas.append(insideFormula.left)
+                    listOfFormulas.append(insideFormula.right)
+                }
+            }
+            if listOfFormulasActual.count == listOfFormulas.count {
+                break
+            }
+        }
+        
+        listOfFormulas.forEach {
+            if $0 is Atom {
+                interpretationFormulas["\($0.getFormulaDescription())"] = true
+            }
+            if $0 is Not {
+                interpretationFormulas["\($0.getFormulaDescription())"] = false
+            }
+        }
+        
+        return interpretationFormulas
     }
     
     func validityChecking(formula: Formula) -> Bool {
