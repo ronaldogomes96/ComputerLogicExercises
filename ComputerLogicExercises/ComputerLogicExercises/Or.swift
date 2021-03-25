@@ -7,9 +7,17 @@
 
 import Foundation
 
-class Or: Implies {
+class Or: Formula {
     
-    override func getFormulaDescription() -> String {
+    let left: Formula
+    let right: Formula
+    
+    init(left: Formula, right: Formula) {
+        self.left = left
+        self.right = right
+    }
+    
+    func getFormulaDescription() -> String {
         return "(\(left.getFormulaDescription()) v \(right.getFormulaDescription()))"
     }
 }

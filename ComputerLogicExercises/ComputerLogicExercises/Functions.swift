@@ -10,21 +10,7 @@ import Foundation
 class Functions {
     
     func numberOfAtoms(formula: Formula) -> Int {
-        if formula is Atom {
-            return 1
-        }
-        else if formula is Not {
-            guard let newFormula = formula as? Not else {
-                return 0
-            }
-            return numberOfAtoms(formula: newFormula.atom)
-        }
-        else {
-            guard let newFormula = formula as? Implies else {
-                return 0
-            }
-            return numberOfAtoms(formula: newFormula.left) + numberOfAtoms(formula: newFormula.right)
-        }
+        return listOfAtoms(formula: formula).count
     }
     
     func connec(formula: Formula) -> Int {
@@ -37,8 +23,20 @@ class Functions {
             }
             return 1 + connec(formula: newFormula.atom)
         }
-        else {
+        else if formula is Implies{
             guard let newFormula = formula as? Implies else {
+                return 0
+            }
+            return 1 + connec(formula: newFormula.left) + connec(formula: newFormula.right)
+        }
+        else if formula is And{
+            guard let newFormula = formula as? And else {
+                return 0
+            }
+            return 1 + connec(formula: newFormula.left) + connec(formula: newFormula.right)
+        }
+        else {
+            guard let newFormula = formula as? Or else {
                 return 0
             }
             return 1 + connec(formula: newFormula.left) + connec(formula: newFormula.right)
@@ -62,8 +60,20 @@ class Functions {
             }
             return atoms(formula: newFormula.atom)
         }
-        else {
+        else if formula is Implies {
             guard let newFormula = formula as? Implies else {
+                return []
+            }
+            return atoms(formula: newFormula.left) + atoms(formula: newFormula.right)
+        }
+        else if formula is And {
+            guard let newFormula = formula as? And else {
+                return []
+            }
+            return atoms(formula: newFormula.left) + atoms(formula: newFormula.right)
+        }
+        else {
+            guard let newFormula = formula as? Or else {
                 return []
             }
             return atoms(formula: newFormula.left) + atoms(formula: newFormula.right)
@@ -78,19 +88,21 @@ class Functions {
             return newSubformula
         }
         else if formula is Implies && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
+            if let newFormula = formula as? Implies {
+                return Implies(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                               right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+            }
+        }
+        else if formula is And && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
             if let newFormula = formula as? And {
                 return And(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
                            right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
             }
-            else if let newFormula = formula as? Or {
+        }
+        else if formula is Or && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
+            if let newFormula = formula as? Or {
                 return Or(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
                           right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
-            }
-            else {
-                if let newFormula = formula as? Implies {
-                    return Implies(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
-                                   right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
-                }
             }
         }
         else {
@@ -114,23 +126,27 @@ class Functions {
             return !truthValue(formula: newFormula.atom, interpretation: interpretation)
         }
         else if formula is Implies {
-            if let newFormula = formula as? And {
-                return truthValue(formula: newFormula.left, interpretation: interpretation) &&
-                    truthValue(formula: newFormula.right, interpretation: interpretation)
-            }
-            else if let newFormula = formula as? Or {
-                return truthValue(formula: newFormula.left, interpretation: interpretation) ||
-                    truthValue(formula: newFormula.right, interpretation: interpretation)
-            }
-            else if let newFormula = formula as? Implies {
+            if let newFormula = formula as? Implies {
                 if truthValue(formula: newFormula.left, interpretation: interpretation) == true &&
                     truthValue(formula: newFormula.right, interpretation: interpretation) == false {
                     return false
                 }
                 else if truthValue(formula: newFormula.left, interpretation: interpretation) == false ||
-                    truthValue(formula: newFormula.right, interpretation: interpretation) == true {
+                            truthValue(formula: newFormula.right, interpretation: interpretation) == true {
                     return true
                 }
+            }
+        }
+        else if formula is And {
+            if let newFormula = formula as? And {
+                return truthValue(formula: newFormula.left, interpretation: interpretation) &&
+                    truthValue(formula: newFormula.right, interpretation: interpretation)
+            }
+        }
+        else if formula is Or {
+            if let newFormula = formula as? Or {
+                return truthValue(formula: newFormula.left, interpretation: interpretation) ||
+                    truthValue(formula: newFormula.right, interpretation: interpretation)
             }
         }
         return Bool.init()
