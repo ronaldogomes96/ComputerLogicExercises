@@ -429,6 +429,21 @@ class Functions {
     }
     
     func isContradiction(results: [Formula]) -> Bool {
+        var formula = results
+        let formulaForComparation = formula.popLast()!
+        for formula in formula {
+            if let formulaForComparation = formulaForComparation as? Not {
+                if formula.getFormulaDescription() == formulaForComparation.atom.getFormulaDescription() {
+                    return true
+                }
+            }
+            if let formula = formula as? Not {
+                if formula.atom.getFormulaDescription() == formulaForComparation.getFormulaDescription() {
+                    return true
+                }
+            }
+        }
+        
         return false
     }
 }
