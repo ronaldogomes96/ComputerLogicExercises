@@ -246,73 +246,66 @@ class Functions {
     }
     
     //MARK: - TABLEAUX: Verifica se um conjunto de formulas é satisfativel ou nao
-    func tableaux(formulas: [Formula], isUsed: [Int]) -> Bool {
-        var insideFormulas = formulas
-        var insideIsUsed = isUsed
+    func tableaux(formulas: [Formula], isCheck: [Bool]) -> Bool {
+        var formula = formulas
+        var isCheck = isCheck
         
-        for (index, value) in insideFormulas.enumerated() {
+        for (index, value) in formula.enumerated() {
             
             //Verifica se a formula ainda nao foi verificada
-            if insideIsUsed[index] == 1 {
-                
+            if !isCheck[index] {
+                //Marca como verificada
+                isCheck[index] = true
+
                 // Atom
                 if value is Atom {
-                    insideIsUsed[index] = 0
-                    
                     //Caso não tenha uma contradição
-                    if !isContradiction(results: insideFormulas) {
+                    if !isContradiction(results: formula) {
                         //Caso nao tenha mais elementos para analisar, ou seja é o ultimo da arvore
-                        if !insideIsUsed.contains(1) {
+                        if !isCheck.contains(false) {
                             return true
                         }
                         //Caso ainda tenha elementos para analisar
                         else {
-                            return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                            return tableaux(formulas: formula, isCheck: isCheck)
                         }
                     }
-                    
                     //Caso tenha uma contradição
                     return false
                 }
                 
                 // And
                 else if let value = value as? And {
-                    insideIsUsed[index] = 0
-                    
-                    insideFormulas.append(value.left)
-                    insideIsUsed.append(1)
+                    formula.append(value.left)
+                    isCheck.append(false)
                     //Caso o primeiro elemento ja tenha uma contradicao
-                    if isContradiction(results: insideFormulas) {
+                    if isContradiction(results: formula) {
                         return false
                     }
                     
-                    insideFormulas.append(value.right)
-                    insideIsUsed.append(1)
+                    formula.append(value.right)
+                    isCheck.append(false)
                     //Caso o segundo elementos tenha uma contradicao
-                    if isContradiction(results: insideFormulas) {
+                    if isContradiction(results: formula) {
                         return false
                     }
-                    
-                    return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+
+                    return tableaux(formulas: formula, isCheck: isCheck)
                 }
-                
-                
                 
                 //Not
                 else if let value = value as? Not {
-                    
                     //Valor interno é um Atom
                     if value.atom is Atom {
-                        insideIsUsed[index] = 0
                         //Caso não tenha uma contradição
-                        if !isContradiction(results: insideFormulas) {
+                        if !isContradiction(results: formula) {
                             //Caso nao tenha mais elementos para analisar, ou seja é o ultimo da arvore
-                            if !insideIsUsed.contains(1) {
+                            if !isCheck.contains(false) {
                                 return true
                             }
                             //Caso ainda tenha elementos para analisar
                             else {
-                                return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                                return tableaux(formulas: formula, isCheck: isCheck)
                             }
                         }
                         
@@ -322,85 +315,76 @@ class Functions {
                     
                     //Valor interno é um Not
                     else if let valueAsNot = value.atom as? Not {
-                        insideFormulas[index] = valueAsNot.atom
-                        insideIsUsed[index] = 1
-                        return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                        formula[index] = valueAsNot.atom
+                        isCheck[index] = false
+                        return tableaux(formulas: formula, isCheck: isCheck)
                     }
                     
                     //Valor interno é OR
                     else if let valueAsOr = value.atom as? Or {
-                        insideIsUsed[index] = 0
-                        
-                        insideFormulas.append(Not(atom: valueAsOr.left))
-                        insideIsUsed.append(1)
+                        formula.append(Not(atom: valueAsOr.left))
+                        isCheck.append(false)
                         //Caso o primeiro elemento ja tenha uma contradicao
-                        if isContradiction(results: insideFormulas) {
+                        if isContradiction(results: formula) {
                             return false
                         }
                         
-                        insideFormulas.append(Not(atom: valueAsOr.right))
-                        insideIsUsed.append(1)
+                        formula.append(Not(atom: valueAsOr.right))
+                        isCheck.append(false)
                         //Caso o segundo elementos tenha uma contradicao
-                        if isContradiction(results: insideFormulas) {
+                        if isContradiction(results: formula) {
                             return false
                         }
                         
-                        return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                        return tableaux(formulas: formula, isCheck: isCheck)
                     }
                     
                     //Valor interno é IMPLIES
                     else if let valueAsImplies = value.atom as? Implies {
-                        insideIsUsed[index] = 0
-                        
-                        insideFormulas.append(valueAsImplies.left)
-                        insideIsUsed.append(1)
+                        formula.append(valueAsImplies.left)
+                        isCheck.append(false)
                         //Caso o primeiro elemento ja tenha uma contradicao
-                        if isContradiction(results: insideFormulas) {
+                        if isContradiction(results: formula) {
                             return false
                         }
                         
-                        insideFormulas.append(Not(atom: valueAsImplies.right))
-                        insideIsUsed.append(1)
+                        formula.append(Not(atom: valueAsImplies.right))
+                        isCheck.append(false)
                         //Caso o segundo elementos tenha uma contradicao
-                        if isContradiction(results: insideFormulas) {
+                        if isContradiction(results: formula) {
                             return false
                         }
                         
-                        return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                        return tableaux(formulas: formula, isCheck: isCheck)
                     }
                     
                     //Valor interno é AND
                     else if let valueAsAnd = value.atom as? And {
-                        insideIsUsed[index] = 0
-                        
-                        insideFormulas.append(Not(atom: valueAsAnd.left))
-                        insideIsUsed.append(1)
+                        formula.append(Not(atom: valueAsAnd.left))
+                        isCheck.append(false)
                         //Caso esse ramo seja satisfativel
-                        if tableaux(formulas: insideFormulas, isUsed: insideIsUsed) {
+                        if tableaux(formulas: formula, isCheck: isCheck) {
                             return true
                         }
                         //Caso nao seja, remove o elemento e vai para o outro ramo
-                        insideFormulas.removeLast()
-                        insideFormulas.append(Not(atom: valueAsAnd.right))
-                        return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                        formula.removeLast()
+                        formula.append(Not(atom: valueAsAnd.right))
+                        return tableaux(formulas: formula, isCheck: isCheck)
                     }
                 }
                 
-                
                 //OR
                 else if let value = value as? Or {
-                    insideIsUsed[index] = 0
-                    
-                    insideFormulas.append(value.left)
-                    insideIsUsed.append(1)
+                    formula.append(value.left)
+                    isCheck.append(false)
                     //Caso esse ramo seja satisfativel
-                    if tableaux(formulas: insideFormulas, isUsed: insideIsUsed) {
+                    if tableaux(formulas: formula, isCheck: isCheck) {
                         return true
                     }
                     //Caso nao seja, remove o elemento e vai para o outro ramo
-                    insideFormulas.removeLast()
-                    insideFormulas.append(value.right)
-                    return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                    formula.removeLast()
+                    formula.append(value.right)
+                    return tableaux(formulas: formula, isCheck: isCheck)
                 }
                 
                 //IMPLIES
@@ -408,19 +392,17 @@ class Functions {
                     guard let value = value as? Implies else {
                         fatalError()
                     }
-                    
-                    insideIsUsed[index] = 0
-                    
-                    insideFormulas.append(Not(atom: value.left))
-                    insideIsUsed.append(1)
+                                        
+                    formula.append(Not(atom: value.left))
+                    isCheck.append(false)
                     //Caso esse ramo seja satisfativel
-                    if tableaux(formulas: insideFormulas, isUsed: insideIsUsed) {
+                    if tableaux(formulas: formula, isCheck: isCheck) {
                         return true
                     }
                     //Caso nao seja, remove o elemento e vai para o outro ramo
-                    insideFormulas.removeLast()
-                    insideFormulas.append(value.right)
-                    return tableaux(formulas: insideFormulas, isUsed: insideIsUsed)
+                    formula.removeLast()
+                    formula.append(value.right)
+                    return tableaux(formulas: formula, isCheck: isCheck)
                 }
             }
         }
