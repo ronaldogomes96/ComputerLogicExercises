@@ -9,6 +9,12 @@ import Foundation
 
 class Functions {
     
+    /*
+     Returns the number of atoms occurring in a formula.
+         For instance,
+         number_of_atoms(Implies(Atom('q'), And(Atom('p'), Atom('q'))))
+         must return 3 (Observe that this function counts the repetitions of atoms)
+     */
     func numberOfAtoms(formula: Formula) -> Int {
         return listOfAtoms(formula: formula).count
     }
@@ -43,6 +49,15 @@ class Functions {
         }
     }
     
+    /*
+     Returns the set of all subformulas of a formula.
+         For example, observe the piece of code below.
+         my_formula = Implies(Atom('p'), Or(Atom('p'), Atom('s')))
+         for subformula in subformulas(my_formula):
+             print(subformula)
+         This piece of code prints p, s, (p v s), (p → (p v s))
+         (Note that there is no repetition of p)
+     */
     func listOfAtoms(formula: Formula) -> [String]{
         let listOfAtoms = self.atoms(formula: formula)
         let setList = Set(listOfAtoms)
@@ -50,6 +65,16 @@ class Functions {
         return listOfAtomsTransformed
     }
     
+    /*
+     """Returns the set of all atoms occurring in a formula.
+         For example, observe the piece of code below.
+         my_formula = Implies(Atom('p'), Or(Atom('p'), Atom('s')))
+         for atom in atoms(my_formula):
+             print(atom)
+         This piece of code above prints: p, s
+         (Note that there is no repetition of p)
+         """
+     */
     private func atoms(formula: Formula) -> [String]{
         if formula is Atom {
             return [formula.getFormulaDescription()]
@@ -80,6 +105,10 @@ class Functions {
         }
     }
     
+    /*
+     Returns a new formula obtained by replacing all occurrences
+         of old_subformula in the input formula by new_subformula.
+     */
     func substitution(formula: Formula, oldSubformula: Formula, newSubformula:  Formula) -> Formula {
         if formula is Atom && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
             return formula
@@ -115,6 +144,10 @@ class Functions {
         return formula
     }
     
+    /*
+     Determines the truth value of a formula in an interpretation (valuation).
+         An interpretation may be defined as dictionary. For example, {'p': True, 'q': False}.
+     */
     func truthValue(formula: Formula, interpretation: [String: Bool]) -> Bool {
         if formula is Atom {
             return interpretation[formula.getFormulaDescription()] ?? Bool.init()
@@ -152,6 +185,11 @@ class Functions {
         return Bool.init()
     }
     
+    /*
+     Checks whether formula is satisfiable.
+         In other words, if the input formula is satisfiable, it returns an interpretation that assigns true to the formula.
+         Otherwise, it returns False.
+     */
     func satisfabilityChecking(formula: Formula) -> Any {
         let listOfAtoms = self.listOfAtoms(formula: formula)
         let setList = Set(listOfAtoms)
@@ -224,6 +262,9 @@ class Functions {
         return interpretationFormulas
     }
     
+    /*
+     Returns True if formula is a logically valid (tautology). Otherwise, it returns False
+     */
     func validityChecking(formula: Formula) -> Bool {
         if (satisfabilityChecking(formula: Not(formula)) as? Bool) == false {
             return true
@@ -232,6 +273,9 @@ class Functions {
         }
     }
     
+    /*
+     Returns True if the conclusion is a logical consequence of the set of premises. Otherwise, it returns False.
+     */
     func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
         var premise = premise
         var uniquePremise: Formula = premise.popLast()!

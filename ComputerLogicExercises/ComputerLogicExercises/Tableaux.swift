@@ -8,6 +8,7 @@
 import Foundation
 
 class Tableaux {
+    
     func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
         var premise = premise
         var uniquePremise: Formula = premise.popLast()!
