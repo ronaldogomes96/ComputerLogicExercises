@@ -11,7 +11,7 @@ class And: Formula {
     let left: Formula
     let right: Formula
     
-    init(left: Formula, right: Formula) {
+    init(_ left: Formula, _ right: Formula) {
         self.left = left
         self.right = right
     }

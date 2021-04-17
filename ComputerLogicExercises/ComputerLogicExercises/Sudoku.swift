@@ -22,10 +22,10 @@ class Sudoku {
         for i in 0..<grid.count {
             for j in 0..<grid.count {
                 if grid[i][j] != 0 {
-                    list_given.append(Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(grid[i][j]))"))
+                    list_given.append(Atom("\(String(i+1))_\(String(j+1))_\(String(grid[i][j]))"))
                     for n in 1...grid.count+1 {
                         if n != grid[i][j] {
-                            list_given.append(Not(atom: Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(n))")))
+                            list_given.append(Not(Atom("\(String(i+1))_\(String(j+1))_\(String(n))")))
                         }
                     }
                 }
@@ -39,7 +39,7 @@ class Sudoku {
         var newListOfFormulas = listOfFormulas
         newListOfFormulas.remove(at: 0)
         newListOfFormulas.forEach { (formula) in
-            firstFormula = And(left: firstFormula, right: formula)
+            firstFormula = And(firstFormula, formula)
         }
         return firstFormula
     }
@@ -50,7 +50,7 @@ class Sudoku {
             for n in 0...grid.count {
                 var orList = [Formula]()
                 for j in 0...grid.count {
-                    orList.append(Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(n+1))"))
+                    orList.append(Atom("\(String(i+1))_\(String(j+1))_\(String(n+1))"))
                 }
                 let formulaOr = orAll(listOfFormulas: orList)
                 listRows.append(formulaOr)
@@ -64,7 +64,7 @@ class Sudoku {
         var newListOfFormulas = listOfFormulas
         newListOfFormulas.remove(at: 0)
         newListOfFormulas.forEach { (formula) in
-            firstFormula = Or(left: firstFormula, right: formula)
+            firstFormula = Or(firstFormula, formula)
         }
         return firstFormula
     }
@@ -75,8 +75,8 @@ class Sudoku {
             for j in 0...grid.count {
                 for n1 in 0...grid.count - 1 {
                     for n2 in n1+1...grid.count {
-                        listCells.append(Not(atom: And(left: Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(n1+1))"),
-                                                       right: Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(n2+1))"))))
+                        listCells.append(Not(And(Atom("\(String(i+1))_\(String(j+1))_\(String(n1+1))"),
+                                                 Atom("\(String(i+1))_\(String(j+1))_\(String(n2+1))"))))
                     }
                 }
             }
@@ -90,7 +90,7 @@ class Sudoku {
             for n in 0...grid.count {
                 var orList = [Formula]()
                 for i in 0...grid.count {
-                    orList.append(Atom(atom: "\(String(i+1))_\(String(j+1))_\(String(n+1))"))
+                    orList.append(Atom("\(String(i+1))_\(String(j+1))_\(String(n+1))"))
                 }
                 let formulaOr = orAll(listOfFormulas: orList)
                 listColumns.append(formulaOr)
@@ -107,7 +107,7 @@ class Sudoku {
                     var orList = [Formula]()
                     for i in 0...(Int(sqrt(Double(grid.count)))) {
                         for j in 0...(Int(sqrt(Double(grid.count)))) {
-                            orList.append(Atom(atom: "\(String(sl*2+i+1))_\(String(sc*2+j+1))_\(String(n+1))"))
+                            orList.append(Atom("\(String(sl*2+i+1))_\(String(sc*2+j+1))_\(String(n+1))"))
                         }
                     }
                     let formulaOr = orAll(listOfFormulas: orList)
@@ -120,16 +120,16 @@ class Sudoku {
     
     func finalFormula() -> Formula {
         return And(
-            left: And(
-                left: And(
-                    left: givenDigitsConstraints(grid: myGrid),
-                    right: rowConstraints(grid: myGrid)),
-                right: And(
-                    left: cellsConstraints(grid: myGrid),
-                    right: columnsConstraints(grid: myGrid)
+            And(
+                And(
+                    givenDigitsConstraints(grid: myGrid),
+                    rowConstraints(grid: myGrid)),
+                And(
+                    cellsConstraints(grid: myGrid),
+                    columnsConstraints(grid: myGrid)
                 )
             ),
-            right: subgridsConstrains(grid: myGrid)
+            subgridsConstrains(grid: myGrid)
         )
     }
     

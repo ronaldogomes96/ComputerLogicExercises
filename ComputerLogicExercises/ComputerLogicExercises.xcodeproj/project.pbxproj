@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		770CB071262B8EDA00AE8807 /* Tableaux.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770CB070262B8EDA00AE8807 /* Tableaux.swift */; };
+		770CB075262B944400AE8807 /* DPLLSolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770CB074262B944400AE8807 /* DPLLSolver.swift */; };
+		770CB085262B946300AE8807 /* CNF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770CB083262B946300AE8807 /* CNF.swift */; };
+		770CB086262B946300AE8807 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770CB084262B946300AE8807 /* extension.swift */; };
 		771EBD2625857F3A0093D063 /* Sudoku.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771EBD2525857F3A0093D063 /* Sudoku.swift */; };
 		777FA5F62569E71E009DF7A5 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777FA5F52569E71E009DF7A5 /* Functions.swift */; };
 		77EC48232569ACF2002DBAFB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC48222569ACF2002DBAFB /* main.swift */; };
@@ -31,6 +35,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		770CB070262B8EDA00AE8807 /* Tableaux.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tableaux.swift; sourceTree = "<group>"; };
+		770CB074262B944400AE8807 /* DPLLSolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPLLSolver.swift; sourceTree = "<group>"; };
+		770CB079262B944B00AE8807 /* uf50-01.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uf50-01.txt"; sourceTree = "<group>"; };
+		770CB07A262B944B00AE8807 /* uf50-01.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uf50-01.cnf"; sourceTree = "<group>"; };
+		770CB07B262B944B00AE8807 /* uf50-03.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uf50-03.cnf"; sourceTree = "<group>"; };
+		770CB07C262B944B00AE8807 /* uf50-02.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uf50-02.cnf"; sourceTree = "<group>"; };
+		770CB07E262B944B00AE8807 /* grid_3.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = grid_3.cnf; sourceTree = "<group>"; };
+		770CB080262B944B00AE8807 /* uuf50-01.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uuf50-01.cnf"; sourceTree = "<group>"; };
+		770CB081262B944B00AE8807 /* uuf50-02.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uuf50-02.cnf"; sourceTree = "<group>"; };
+		770CB082262B944B00AE8807 /* uuf50-03.cnf */ = {isa = PBXFileReference; lastKnownFileType = text; path = "uuf50-03.cnf"; sourceTree = "<group>"; };
+		770CB083262B946300AE8807 /* CNF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CNF.swift; sourceTree = "<group>"; };
+		770CB084262B946300AE8807 /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		771EBD2525857F3A0093D063 /* Sudoku.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sudoku.swift; sourceTree = "<group>"; };
 		777FA5F52569E71E009DF7A5 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
 		77EC481F2569ACF2002DBAFB /* ComputerLogicExercises */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ComputerLogicExercises; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +70,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		770CB077262B944B00AE8807 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				770CB078262B944B00AE8807 /* satisfativeis */,
+				770CB07D262B944B00AE8807 /* minesweeper */,
+				770CB07F262B944B00AE8807 /* insatisfativeis */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
+		770CB078262B944B00AE8807 /* satisfativeis */ = {
+			isa = PBXGroup;
+			children = (
+				770CB079262B944B00AE8807 /* uf50-01.txt */,
+				770CB07A262B944B00AE8807 /* uf50-01.cnf */,
+				770CB07B262B944B00AE8807 /* uf50-03.cnf */,
+				770CB07C262B944B00AE8807 /* uf50-02.cnf */,
+			);
+			path = satisfativeis;
+			sourceTree = "<group>";
+		};
+		770CB07D262B944B00AE8807 /* minesweeper */ = {
+			isa = PBXGroup;
+			children = (
+				770CB07E262B944B00AE8807 /* grid_3.cnf */,
+			);
+			path = minesweeper;
+			sourceTree = "<group>";
+		};
+		770CB07F262B944B00AE8807 /* insatisfativeis */ = {
+			isa = PBXGroup;
+			children = (
+				770CB080262B944B00AE8807 /* uuf50-01.cnf */,
+				770CB081262B944B00AE8807 /* uuf50-02.cnf */,
+				770CB082262B944B00AE8807 /* uuf50-03.cnf */,
+			);
+			path = insatisfativeis;
+			sourceTree = "<group>";
+		};
 		77EC48162569ACF2002DBAFB = {
 			isa = PBXGroup;
 			children = (
@@ -82,6 +137,11 @@
 				77EC48372569C58F002DBAFB /* Or.swift */,
 				777FA5F52569E71E009DF7A5 /* Functions.swift */,
 				771EBD2525857F3A0093D063 /* Sudoku.swift */,
+				770CB070262B8EDA00AE8807 /* Tableaux.swift */,
+				770CB083262B946300AE8807 /* CNF.swift */,
+				770CB084262B946300AE8807 /* extension.swift */,
+				770CB074262B944400AE8807 /* DPLLSolver.swift */,
+				770CB077262B944B00AE8807 /* Files */,
 			);
 			path = ComputerLogicExercises;
 			sourceTree = "<group>";
@@ -145,13 +205,17 @@
 			files = (
 				77EC482C2569B360002DBAFB /* Formula.swift in Sources */,
 				77EC48322569B60C002DBAFB /* Not.swift in Sources */,
+				770CB075262B944400AE8807 /* DPLLSolver.swift in Sources */,
 				77EC482F2569B3CA002DBAFB /* Atom.swift in Sources */,
+				770CB071262B8EDA00AE8807 /* Tableaux.swift in Sources */,
 				777FA5F62569E71E009DF7A5 /* Functions.swift in Sources */,
 				77EC483C2569C666002DBAFB /* Implies.swift in Sources */,
 				771EBD2625857F3A0093D063 /* Sudoku.swift in Sources */,
+				770CB086262B946300AE8807 /* extension.swift in Sources */,
 				77EC48352569B71A002DBAFB /* And.swift in Sources */,
 				77EC48382569C58F002DBAFB /* Or.swift in Sources */,
 				77EC48232569ACF2002DBAFB /* main.swift in Sources */,
+				770CB085262B946300AE8807 /* CNF.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

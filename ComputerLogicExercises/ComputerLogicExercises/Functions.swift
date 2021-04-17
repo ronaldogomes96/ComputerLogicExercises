@@ -21,7 +21,7 @@ class Functions {
             guard let newFormula = formula as? Not else {
                 return 0
             }
-            return 1 + connec(formula: newFormula.atom)
+            return 1 + connec(formula: newFormula.inner)
         }
         else if formula is Implies{
             guard let newFormula = formula as? Implies else {
@@ -58,7 +58,7 @@ class Functions {
             guard let newFormula = formula as? Not else {
                 return []
             }
-            return atoms(formula: newFormula.atom)
+            return atoms(formula: newFormula.inner)
         }
         else if formula is Implies {
             guard let newFormula = formula as? Implies else {
@@ -89,26 +89,26 @@ class Functions {
         }
         else if formula is Implies && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
             if let newFormula = formula as? Implies {
-                return Implies(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
-                               right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+                return Implies(substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                               substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
             }
         }
         else if formula is And && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
             if let newFormula = formula as? And {
-                return And(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
-                           right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+                return And(substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                           substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
             }
         }
         else if formula is Or && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
             if let newFormula = formula as? Or {
-                return Or(left: substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
-                          right: substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
+                return Or(substitution(formula: newFormula.left, oldSubformula: oldSubformula, newSubformula: newSubformula),
+                          substitution(formula: newFormula.right, oldSubformula: oldSubformula, newSubformula: newSubformula))
             }
         }
         else {
             if formula is Not && formula.getFormulaDescription() != oldSubformula.getFormulaDescription() {
                 if let newFormula = formula as? Not {
-                    return Not(atom: newFormula.atom)
+                    return Not(newFormula.inner)
                 }
             }
         }
@@ -123,7 +123,7 @@ class Functions {
             guard let newFormula = formula as? Not else {
                 return Bool.init()
             }
-            return !truthValue(formula: newFormula.atom, interpretation: interpretation)
+            return !truthValue(formula: newFormula.inner, interpretation: interpretation)
         }
         else if formula is Implies {
             if let newFormula = formula as? Implies {
@@ -225,7 +225,7 @@ class Functions {
     }
     
     func validityChecking(formula: Formula) -> Bool {
-        if (satisfabilityChecking(formula: Not(atom: formula)) as? Bool) == false {
+        if (satisfabilityChecking(formula: Not(formula)) as? Bool) == false {
             return true
         } else {
             return false
@@ -233,199 +233,16 @@ class Functions {
     }
     
     func logicalConsequence(premise: [Formula], conclusion: Formula) -> Bool {
-        var uniquePremise: Formula = premise.first!
+        var premise = premise
+        var uniquePremise: Formula = premise.popLast()!
         premise.forEach { formula in
-            uniquePremise = And(left: uniquePremise, right: formula)
+            uniquePremise = And(uniquePremise, formula)
         }
-        let consequence = And(left: uniquePremise, right: Not(atom: conclusion))
-        if (satisfabilityChecking(formula: consequence) as? Bool) == false{
+        let consequence = And(uniquePremise, Not(conclusion))
+        if satisfabilityChecking(formula: consequence) is Bool {
             return true
         } else {
             return false
         }
-    }
-    
-    //MARK: - TABLEAUX: Verifica se um conjunto de formulas é satisfativel ou nao
-    func tableaux(formulas: [Formula], isCheck: [Bool]) -> Bool {
-        var formula = formulas
-        var isCheck = isCheck
-        
-        for (index, value) in formula.enumerated() {
-            
-            //Verifica se a formula ainda nao foi verificada
-            if !isCheck[index] {
-                //Marca como verificada
-                isCheck[index] = true
-
-                // Atom
-                if value is Atom {
-                    //Caso não tenha uma contradição
-                    if !isContradiction(results: formula) {
-                        //Caso nao tenha mais elementos para analisar, ou seja é o ultimo da arvore
-                        if !isCheck.contains(false) {
-                            return true
-                        }
-                        //Caso ainda tenha elementos para analisar
-                        else {
-                            return tableaux(formulas: formula, isCheck: isCheck)
-                        }
-                    }
-                    //Caso tenha uma contradição
-                    return false
-                }
-                
-                // And
-                else if let value = value as? And {
-                    formula.append(value.left)
-                    isCheck.append(false)
-                    //Caso o primeiro elemento ja tenha uma contradicao
-                    if isContradiction(results: formula) {
-                        return false
-                    }
-                    
-                    formula.append(value.right)
-                    isCheck.append(false)
-                    //Caso o segundo elementos tenha uma contradicao
-                    if isContradiction(results: formula) {
-                        return false
-                    }
-
-                    return tableaux(formulas: formula, isCheck: isCheck)
-                }
-                
-                //Not
-                else if let value = value as? Not {
-                    //Valor interno é um Atom
-                    if value.atom is Atom {
-                        //Caso não tenha uma contradição
-                        if !isContradiction(results: formula) {
-                            //Caso nao tenha mais elementos para analisar, ou seja é o ultimo da arvore
-                            if !isCheck.contains(false) {
-                                return true
-                            }
-                            //Caso ainda tenha elementos para analisar
-                            else {
-                                return tableaux(formulas: formula, isCheck: isCheck)
-                            }
-                        }
-                        
-                        //Caso tenha uma contradição
-                        return false
-                    }
-                    
-                    //Valor interno é um Not
-                    else if let valueAsNot = value.atom as? Not {
-                        formula[index] = valueAsNot.atom
-                        isCheck[index] = false
-                        return tableaux(formulas: formula, isCheck: isCheck)
-                    }
-                    
-                    //Valor interno é OR
-                    else if let valueAsOr = value.atom as? Or {
-                        formula.append(Not(atom: valueAsOr.left))
-                        isCheck.append(false)
-                        //Caso o primeiro elemento ja tenha uma contradicao
-                        if isContradiction(results: formula) {
-                            return false
-                        }
-                        
-                        formula.append(Not(atom: valueAsOr.right))
-                        isCheck.append(false)
-                        //Caso o segundo elementos tenha uma contradicao
-                        if isContradiction(results: formula) {
-                            return false
-                        }
-                        
-                        return tableaux(formulas: formula, isCheck: isCheck)
-                    }
-                    
-                    //Valor interno é IMPLIES
-                    else if let valueAsImplies = value.atom as? Implies {
-                        formula.append(valueAsImplies.left)
-                        isCheck.append(false)
-                        //Caso o primeiro elemento ja tenha uma contradicao
-                        if isContradiction(results: formula) {
-                            return false
-                        }
-                        
-                        formula.append(Not(atom: valueAsImplies.right))
-                        isCheck.append(false)
-                        //Caso o segundo elementos tenha uma contradicao
-                        if isContradiction(results: formula) {
-                            return false
-                        }
-                        
-                        return tableaux(formulas: formula, isCheck: isCheck)
-                    }
-                    
-                    //Valor interno é AND
-                    else if let valueAsAnd = value.atom as? And {
-                        formula.append(Not(atom: valueAsAnd.left))
-                        isCheck.append(false)
-                        //Caso esse ramo seja satisfativel
-                        if tableaux(formulas: formula, isCheck: isCheck) {
-                            return true
-                        }
-                        //Caso nao seja, remove o elemento e vai para o outro ramo
-                        formula.removeLast()
-                        formula.append(Not(atom: valueAsAnd.right))
-                        return tableaux(formulas: formula, isCheck: isCheck)
-                    }
-                }
-                
-                //OR
-                else if let value = value as? Or {
-                    formula.append(value.left)
-                    isCheck.append(false)
-                    //Caso esse ramo seja satisfativel
-                    if tableaux(formulas: formula, isCheck: isCheck) {
-                        return true
-                    }
-                    //Caso nao seja, remove o elemento e vai para o outro ramo
-                    formula.removeLast()
-                    formula.append(value.right)
-                    return tableaux(formulas: formula, isCheck: isCheck)
-                }
-                
-                //IMPLIES
-                else {
-                    guard let value = value as? Implies else {
-                        fatalError()
-                    }
-                                        
-                    formula.append(Not(atom: value.left))
-                    isCheck.append(false)
-                    //Caso esse ramo seja satisfativel
-                    if tableaux(formulas: formula, isCheck: isCheck) {
-                        return true
-                    }
-                    //Caso nao seja, remove o elemento e vai para o outro ramo
-                    formula.removeLast()
-                    formula.append(value.right)
-                    return tableaux(formulas: formula, isCheck: isCheck)
-                }
-            }
-        }
-        
-        return false
-    }
-    
-    func isContradiction(results: [Formula]) -> Bool {
-        var formula = results
-        let formulaForComparation = formula.popLast()!
-        for formula in formula {
-            if let formulaForComparation = formulaForComparation as? Not {
-                if formula.getFormulaDescription() == formulaForComparation.atom.getFormulaDescription() {
-                    return true
-                }
-            }
-            if let formula = formula as? Not {
-                if formula.atom.getFormulaDescription() == formulaForComparation.getFormulaDescription() {
-                    return true
-                }
-            }
-        }
-        
-        return false
     }
 }

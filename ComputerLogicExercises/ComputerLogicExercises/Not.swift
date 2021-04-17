@@ -9,14 +9,14 @@ import Foundation
 
 class Not: Formula {
     
-    let atom: Formula
+    let inner: Formula
     
-    init(atom: Formula) {
-        self.atom = atom
+    init(_ atom: Formula) {
+        self.inner = atom
     }
     
     func getFormulaDescription() -> String {
-        return "-\(atom.getFormulaDescription())"
+        return "-\(inner.getFormulaDescription())"
     }
     
 }
