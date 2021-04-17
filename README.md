@@ -12,6 +12,10 @@ At this time, the computational logic algorithms implemented have been:
 * Satisfability Checking
 * Validity Checking
 * Logical Consequence
+* Tableaux
+* CNF
+* DPPL
+* Sudoku resolution
 
 ## How to use?
 ### Xcode Project
